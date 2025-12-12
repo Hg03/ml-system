@@ -1,0 +1,6 @@
+data: {}
+features: {}
+models: {}
+pipeline:
+  stage: feature
+  type: offline

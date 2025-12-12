@@ -1,4 +1,4 @@
-default:
+defaults:
   - data: data.yaml
   - features: features.yaml
   - models: models.yaml
