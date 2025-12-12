@@ -19,4 +19,4 @@ jobs:
         run: uv sync
       
       - name: Run pipeline
-        run: just full
+        run: uvx just full
