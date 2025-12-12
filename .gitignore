@@ -142,6 +142,7 @@ env/
 venv/
 artifacts/
 mlruns/
+outputs/
 ENV/
 env.bak/
 venv.bak/
