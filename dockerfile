@@ -1,44 +1,29 @@
-# --- Stage 1: Base Setup (Alpine) ---
-FROM python:3.13-alpine AS python_base
-# Python optimizations
-ENV PYTHONUNBUFFERED=1
-ENV UV_COMPILE_BYTECODE=1
+FROM ghcr.io/astral-sh/uv:python3.13-bookworm
+
+# Install system packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        git \
+        curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set working directory
 WORKDIR /ml_system
-# --- Stage 2: Builder ---
-FROM python_base AS builder
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/
-COPY pyproject.toml ./
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --no-install-project --no-dev
-# --- Stage 3: Dev Environment ---
-FROM python_base AS dev
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-# Add common debug tools for local troubleshooting
-RUN apk add --no-cache \
-    curl \
-    git \
-    vim \
-    wget \
-    bind-tools \
-    netcat-openbsd \
-    procps \
-    bash
-WORKDIR /ml_system
-COPY --from=builder /ml_system/.venv /ml_system/.venv
-ENV PATH="/ml_system/.venv/bin:$PATH"
-ENV PYTHONPATH="/ml_system/src"
-COPY pyproject.toml ./
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --no-install-project
+
+# Copy project files
 COPY . .
-CMD ["/bin/bash"]
-# --- Stage 4: Production (The Tiny Image) ---
-FROM python_base AS prod
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-RUN apk add --no-cache bash git
-WORKDIR /ml_system
-COPY --from=builder /ml_system/.venv /ml_system/.venv
-COPY . .
-ENV PATH="/ml_system/.venv/bin:$PATH"
-ENV PYTHONPATH="/ml_system/src"
+
+# Configure uv to use a .venv in the workdir and add it to PATH
+ENV UV_PROJECT_ENVIRONMENT=.venv \
+    PATH="/ml_system/.venv/bin:${PATH}"
+
+# Install Python dependencies from pyproject.toml
+RUN uv sync --no-dev
+
+# Expose application port
+EXPOSE 8000
+
+# Run FastAPI with uvicorn
+# CMD ["fastapi", "dev", "src/stack/main.py", "--host", "0.0.0.0", "--port", "8000"]
 CMD ["/bin/bash"]

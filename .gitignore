@@ -140,7 +140,6 @@ celerybeat.pid
 .venv
 env/
 venv/
-artifacts/
 mlruns/
 outputs/
 ENV/
