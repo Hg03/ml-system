@@ -9,3 +9,7 @@ feature:
 train:
     @echo "Training Pipeline Only started.."
     @python app/training_endpoint.py pipeline.stage=train
+
+infer:
+    @echo "Inference Pipeline started.."
+    @fastapi dev app/inference_endpoint.py
