@@ -1,0 +1,6 @@
+strategy:
+  num_impute: mean
+  cat_impute: most_frequent
+paths:
+  preprocessor: artifacts/preprocessor.joblib
+  

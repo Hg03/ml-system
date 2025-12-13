@@ -1,9 +1,14 @@
 raw_data_table_name: raw
 paths:
   raw_data: data/raw/raw_data.parquet
+  processed_data: data/processed/processed_data.parquet
 batch_size: 1000
 offset: 0
 columns:
-  features: []
-  target: "mental_state"
+  all: ['id', 'created_at', 'date', 'person_name', 'age', 'gender', 'daily_screen_time_min', 'platform', 'social_media_time_min', 'negative_interactions_count', 'positive_interactions_count', 'sleep_hours', 'physical_activity_min', 'anxiety_level', 'mental_state']
+  features: ['age', 'gender', 'daily_screen_time_min', 'platform', 'social_media_time_min', 'negative_interactions_count', 'positive_interactions_count', 'sleep_hours', 'physical_activity_min', 'anxiety_level']
+  numerical_features: ['age', 'daily_screen_time_min', 'social_media_time_min', 'negative_interactions_count', 'positive_interactions_count', 'sleep_hours', 'physical_activity_min', 'anxiety_level']
+  categorical_features: ['gender', 'platform']
+  ordinal_features: ['gender', 'platform']
+  target: 'mental_state'
 
