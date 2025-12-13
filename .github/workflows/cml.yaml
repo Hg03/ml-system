@@ -19,4 +19,7 @@ jobs:
         run: uv sync
       
       - name: Run pipeline
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
         run: uv run python app/training_endpoint.py
