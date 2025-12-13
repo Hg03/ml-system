@@ -1,5 +1,5 @@
-from ml_system.feature_pipeline import FeaturePipeline
-from ml_system.training_pipeline import TrainingPipeline
+from ml_system.pipelines.feature_pipeline import FeaturePipeline
+from ml_system.pipelines.training_pipeline import TrainingPipeline
 from omegaconf import DictConfig
 import hydra
 
