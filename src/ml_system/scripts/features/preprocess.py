@@ -2,6 +2,7 @@ from sklearn.impute import SimpleImputer
 from ml_system.scripts.utils.saving_utils import save_
 from ml_system.scripts.utils.loading_utils import load_
 from sklearn.preprocessing import OrdinalEncoder, FunctionTransformer
+from sklearn.model_selection import train_test_split
 from sklearn.compose import make_column_transformer
 from sklearn.pipeline import Pipeline
 from omegaconf import DictConfig, ListConfig
@@ -43,14 +44,20 @@ def preprare_to_preprocess(df: pl.DataFrame, configs: DictConfig):
 
 def transform_data(configs: DictConfig):
     raw_data_path = configs.data.paths.raw_data
-    preprocessed_data_path = configs.data.paths.processed_data
+    train_preprocessed_data_path = configs.data.paths.train_processed_data
+    test_preprocessed_data_path = configs.data.paths.test_processed_data
     preprocessor_path = configs.features.paths.preprocessor
+    test_size = configs.features.test_size
     df = load_(path=raw_data_path, format='parquet')
     df, X, y = preprare_to_preprocess(df=df, configs=configs)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, stratify=y)
     preprocessor = make_preprocessor(configs=configs)
-    transformed_X = preprocessor.fit_transform(X)
-    transformed_output = transformed_X.with_columns(y)
-    save_(to_store=transformed_output, path=preprocessed_data_path, format='parquet')
+    train_transformed_X = preprocessor.fit_transform(X_train)
+    test_transformed_X = preprocessor.transform(X_test)
+    train_transformed_output = train_transformed_X.with_columns(y_train)
+    test_transformed_output = test_transformed_X.with_columns(y_test)
+    save_(to_store=train_transformed_output, path=train_preprocessed_data_path, format='parquet')
+    save_(to_store=test_transformed_output, path=test_preprocessed_data_path, format='parquet')
     save_(to_store=preprocessor, path=preprocessor_path, format='model')
     print('Preprocessing Completed..')
     
