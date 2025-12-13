@@ -1,6 +1,10 @@
 full:
     @echo "Full Pipeline (Feature + Training) run started.."
-    @python app/training_endpoint.python
+    @python app/training_endpoint.py
+
+full_offline:
+    @echo "Full Pipeline (Feature + Training) run started.."
+    @python app/training_endpoint.py pipeline.type=offline
 
 full_offline:
     @echo "Full Pipeline (Feature + Training) run started.."
@@ -17,6 +21,10 @@ feature_offline:
 train:
     @echo "Training Pipeline Only started.."
     @python app/training_endpoint.py pipeline.stage=train
+
+train_offline:
+    @echo "Training Pipeline Only started.."
+    @python app/training_endpoint.py pipeline.stage=train pipeline.type=offline
 
 infer:
     @echo "Inference Pipeline started.."
