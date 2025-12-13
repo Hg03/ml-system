@@ -7,7 +7,7 @@ class FeaturePipeline:
         self.configs = configs
 
     def execute(self):
-        # from_supabase(configs=self.configs)
+        from_supabase(configs=self.configs)
         raw_validation(configs=self.configs)
         transform_data(configs=self.configs)
         print("Feature Pipeline Done..")
