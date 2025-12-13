@@ -1,6 +1,8 @@
-from ml_system.scripts.data.loader import from_supabase
 from ml_system.scripts.validation.data_validator import raw_validation
 from ml_system.scripts.features.preprocess import transform_data
+from ml_system.scripts.features.feature_store import push_to_hops
+from ml_system.scripts.data.loader import from_supabase
+
 
 class FeaturePipeline:
     def __init__(self, configs):
@@ -10,4 +12,5 @@ class FeaturePipeline:
         from_supabase(configs=self.configs)
         raw_validation(configs=self.configs)
         transform_data(configs=self.configs)
+        push_to_hops(configs=self.configs)
         print("Feature Pipeline Done..")

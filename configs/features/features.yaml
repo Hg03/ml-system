@@ -3,5 +3,41 @@ strategy:
   cat_impute: most_frequent
 test_size: 0.3
 paths:
-  preprocessor: artifacts/preprocessor.joblib
+  preprocessor: artifacts/preprocessor.joblib 
+store:
+  train:
+    name: train_fg
+    version: 1
+    description: train feature group
+    primary_key: ['id']
+  test:
+    name: test_fg
+    version: 1
+    description: test feature group
+    primary_key: ['id']
+  feature_descriptions:
+  - name: id
+    description: primary key
+  - name: age
+    description: Age of person
+  - name: gender
+    description: Gender of person
+  - name: daily_screen_time_min
+    description: Daily Screen Time (in minutes)
+  - name: platform
+    description: Platform used by person
+  - name: social_media_time_min
+    description: Social Media Time (in minutes)
+  - name: negative_interactions_count
+    description: Count of Negative Interactions faced by person
+  - name: positive_interactions_count
+    description: Count of Positive Interactions faced by person
+  - name: sleep_hours
+    description: Hours of Sleep person take
+  - name: physical_activity_min
+    description: Physical activity time (in minutes)
+  - name: anxiety_level
+    description: anxiety level
+  - name: mental_state
+    description: mental state
   
