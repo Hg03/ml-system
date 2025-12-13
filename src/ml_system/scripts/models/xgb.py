@@ -3,8 +3,13 @@ from ml_system.scripts.utils.saving_utils import save_
 from sklearn.pipeline import Pipeline
 from xgboost import XGBClassifier
 from omegaconf import DictConfig
+import dagshub
+import mlflow
 import polars as pl
 from typing import Any
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 
 def get_model(configs: DictConfig):
@@ -38,3 +43,10 @@ def train_model(configs: DictConfig):
     model.fit(train.drop(target), train.select(pl.col(target)))
     train_pred = model.predict(train.drop(target))
     test_pred = model.predict(test.drop(target))
+    make_experiment(configs=configs, model=model)
+
+def make_experiment(configs: DictConfig, model: Any):
+    dagshub.init(repo_owner='Hg03', repo_name='ml-system', mlflow=True)
+    dagshub.auth.add_app_token(os.getenv('DAGSHUB_TOKEN'))
+    with mlflow.start_run():
+        mlflow.xgboost.autolog(log_models=True)
