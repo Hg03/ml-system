@@ -1,6 +1,7 @@
 strategy:
   num_impute: mean
   cat_impute: most_frequent
+test_size: 0.3
 paths:
   preprocessor: artifacts/preprocessor.joblib
   

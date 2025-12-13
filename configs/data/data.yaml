@@ -1,7 +1,8 @@
 raw_data_table_name: raw
 paths:
   raw_data: data/raw/raw_data.parquet
-  processed_data: data/processed/processed_data.parquet
+  train_processed_data: data/processed/train_processed_data.parquet
+  test_processed_data: data/processed/test_processed_data.parquet
 batch_size: 1000
 offset: 0
 columns:
