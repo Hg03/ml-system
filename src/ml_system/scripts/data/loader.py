@@ -14,7 +14,7 @@ def format_dataframe(df: pl.DataFrame, target_col: str):
 
 def from_supabase(configs: dict) -> pl.DataFrame:
     load_dotenv()
-    conn = create_client(supabase_url=os.getenv("supabase_url"), supabase_key=os.getenv("supabase_api_key"))
+    conn = create_client(supabase_url=os.getenv("SUPABASE_URL"), supabase_key=os.getenv("SUPABASE_API_KEY"))
     json_data = []
     batch_size, offset = configs.data.batch_size, configs.data.offset
     raw_data_path = configs.data.paths.raw_data
