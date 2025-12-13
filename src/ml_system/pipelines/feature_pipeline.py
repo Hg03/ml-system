@@ -1,4 +1,4 @@
-from ml_system.scripts.data.loader import fetch_raw_data
+from ml_system.scripts.data.loader import from_supabase
 
 
 class FeaturePipeline:
@@ -6,5 +6,5 @@ class FeaturePipeline:
         self.configs = configs
 
     def execute(self):
-        fetch_raw_data(configs=self.configs)
+        from_supabase(configs=self.configs)
         print("Feature Pipeline Done..")

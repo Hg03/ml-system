@@ -1,4 +1,9 @@
-url: https://gist.githubusercontent.com/Hg03/6d8dbc63672153aee702d3e596e39fab/raw/37551677fdce5acaf9c9027ca00cdd6dfc292de9/raw.csv
+raw_data_table_name: raw
 paths:
   raw_data: data/raw/raw_data.parquet
+batch_size: 1000
+offset: 0
+columns:
+  features: []
+  target: "mental_state"
 
