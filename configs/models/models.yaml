@@ -1,0 +1,7 @@
+active_model: xgb
+
+xgb:
+  params:
+    use_label_encoder: False
+    eval_metric: mlogloss
+    random_state: 42
