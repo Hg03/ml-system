@@ -142,6 +142,7 @@ env/
 venv/
 mlruns/
 outputs/
+data/*/*.parquet
 ENV/
 env.bak/
 venv.bak/

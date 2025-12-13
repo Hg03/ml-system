@@ -1,0 +1,9 @@
+raw_data_table_name: raw
+paths:
+  raw_data: data/raw/raw_data.parquet
+batch_size: 1000
+offset: 0
+columns:
+  features: []
+  target: "mental_state"
+
