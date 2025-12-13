@@ -33,3 +33,4 @@ def from_supabase(configs: dict) -> pl.DataFrame:
     raw_data = pl.DataFrame(json_data)
     df = format_dataframe(df=raw_data, target_col=configs.data.columns.target)
     save_(to_store=df, path=raw_data_path, format='parquet')
+    print('Loading Completed')
