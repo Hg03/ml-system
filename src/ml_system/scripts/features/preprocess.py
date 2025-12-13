@@ -60,4 +60,3 @@ def transform_data(configs: DictConfig):
     save_(to_store=test_transformed_output, path=test_preprocessed_data_path, format='parquet')
     save_(to_store=preprocessor, path=preprocessor_path, format='model')
     print('Preprocessing Completed..')
-    
