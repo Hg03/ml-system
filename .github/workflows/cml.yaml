@@ -23,5 +23,5 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
-          DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_USER_TOKEN }}
+          DAGSHUB_USER_TOKEN: ${{ secrets.DAGSHUB_USER_TOKEN }}
         run: uv run python app/training_endpoint.py
