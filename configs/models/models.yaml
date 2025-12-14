@@ -1,5 +1,6 @@
 active_model: xgb
-
+paths:
+  artifacts: artifacts
 xgb:
   params:
     use_label_encoder: False

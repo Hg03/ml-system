@@ -1,10 +1,12 @@
 from ml_system.scripts.utils.loading_utils import load_
 from ml_system.scripts.utils.saving_utils import save_
 from sklearn.pipeline import Pipeline
+from sklearn.metrics import precision_score, recall_score, f1_score
 from xgboost import XGBClassifier
 from omegaconf import DictConfig
 import dagshub
 import mlflow
+from mlflow.models import infer_signature
 import polars as pl
 from typing import Any
 from dotenv import load_dotenv
@@ -38,15 +40,32 @@ def train_model(configs: DictConfig):
     model = get_model(configs=configs)
     preprocessor = load_(path=preprocessor_path, format='model')
     full_model_pipeline = get_full_model_pipeline(preprocessor, model)
-    train, test = load_(path=train_preprocessed_data_path, format='parquet'), load_(path=test_preprocessed_data_path, format='parquet')
-    train, test = encode_target(train, target), encode_target(test, target)
-    model.fit(train.drop(target), train.select(pl.col(target)))
-    train_pred = model.predict(train.drop(target))
-    test_pred = model.predict(test.drop(target))
-    make_experiment(configs=configs, model=model)
+    X_train = load_(path=configs.data.paths.X_train, format='parquet')
+    X_test = load_(path=configs.data.paths.X_test, format='parquet')
+    y_train = load_(path=configs.data.paths.y_train, format='parquet')
+    y_test = load_(path=configs.data.paths.y_test, format='parquet')
+    y_train_encoded = encode_target(y_train, target)
+    y_test_encoded = encode_target(y_test, target)
+    full_model_pipeline.fit(X_train, y_train_encoded)
+    train_pred = full_model_pipeline.predict(X_train)
+    test_pred = full_model_pipeline.predict(X_test)
+    save_(to_store=full_model_pipeline, path=configs.features.paths.model, format='model')
+    print('Model Trained...')
+    make_experiment(configs=configs, assets=[X_train, X_test, y_train_encoded, y_test_encoded, train_pred, test_pred], model=full_model_pipeline)
 
-def make_experiment(configs: DictConfig, model: Any):
+def make_experiment(configs: DictConfig, assets: list[Any], model: Any):
+    X_train, X_test, y_train, y_test, train_pred, test_pred = assets
     dagshub.init(repo_owner='Hg03', repo_name='ml-system', mlflow=True)
     dagshub.auth.add_app_token(os.getenv('DAGSHUB_TOKEN'))
     with mlflow.start_run():
-        mlflow.xgboost.autolog(log_models=True)
+        mlflow.log_metric('precision', precision_score(y_test, test_pred, average='macro'))
+        mlflow.log_metric('recall', recall_score(y_test, test_pred, average='macro'))
+        mlflow.log_metric('f1', f1_score(y_test, test_pred, average='macro'))
+        signature = infer_signature(X_train.to_pandas(), train_pred)
+        mlflow.sklearn.log_model(
+            sk_model=model, 
+            artifact_path=configs.models.paths.artifacts, 
+            signature=signature,
+            input_example=X_train.to_pandas()[:5]
+        )
+    print('Experimentation Done...')
