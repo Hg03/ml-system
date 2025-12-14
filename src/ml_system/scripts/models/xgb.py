@@ -56,6 +56,7 @@ def train_model(configs: DictConfig):
 def make_experiment(configs: DictConfig, assets: list[Any], model: Any):
     X_train, X_test, y_train, y_test, train_pred, test_pred = assets
     dagshub.init(repo_owner='Hg03', repo_name='ml-system', mlflow=True)
+    mlflow.set_tracking_uri('https://dagshub.com/Hg03/ml-system.mlflow')
     dagshub.auth.add_app_token(os.getenv('DAGSHUB_USER_TOKEN'))
     with mlflow.start_run():
         mlflow.log_metric('precision', precision_score(y_test, test_pred, average='macro'))
