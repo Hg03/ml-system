@@ -6,10 +6,6 @@ full_offline:
     @echo "Full Pipeline (Feature + Training) run started.."
     @python app/training_endpoint.py pipeline.type=offline
 
-full_offline:
-    @echo "Full Pipeline (Feature + Training) run started.."
-    @python app/training_endpoint.python pipeline.type=offline
-
 feature:
     @echo "Feature Pipeline Only started.."
     @python app/training_endpoint.py pipeline.stage=feature
