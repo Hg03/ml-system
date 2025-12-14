@@ -3,7 +3,9 @@ strategy:
   cat_impute: most_frequent
 test_size: 0.3
 paths:
-  preprocessor: artifacts/preprocessor.joblib 
+  preprocessor: artifacts/preprocessor.joblib
+raw_sequence_of_columns: ['age', 'gender', 'daily_screen_time_min', 'platform', 'social_media_time_min', 'negative_interactions_count', 'positive_interactions_count', 'sleep_hours', 'physical_activity_min', 'anxiety_level']
+processed_sequence_of_columns: ['gender', 'platform', 'age', 'daily_screen_time_min', 'social_media_time_min', 'negative_interactions_count', 'positive_interactions_count', 'sleep_hours', 'physical_activity_min', 'anxiety_level']
 store:
   train:
     name: train_fg
