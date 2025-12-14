@@ -1,6 +1,10 @@
 raw_data_table_name: raw
 paths:
   raw_data: data/raw/raw_data.parquet
+  X_train: data/raw/X_train.parquet
+  X_test: data/raw/X_test.parquet
+  y_train: data/raw/y_train.parquet
+  y_test: data/raw/y_test.parquet
   train_processed_data: data/processed/train_processed_data.parquet
   test_processed_data: data/processed/test_processed_data.parquet
 batch_size: 1000
