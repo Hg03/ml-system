@@ -1,6 +1,12 @@
 active_model: xgb
 paths:
   artifacts: artifacts
+  model: artifacts/model/full_model_pipeline.joblib
+  registry_model: artifacts/model/registry_model
+registry:
+  name: xgb_model
+  version: 1
+  description: Champion Model
 xgb:
   params:
     use_label_encoder: False

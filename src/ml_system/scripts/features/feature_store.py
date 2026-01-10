@@ -16,6 +16,9 @@ def init_hops():
 def get_fs(project: Any):
     return project.get_feature_store()
 
+def get_mr(project: Any):
+    return project.get_model_registry()
+
 def get_fg(fs: Any, configs: DictConfig, split_type: str, purpose: str):
     fg_info = configs.features.store.train if split_type == 'train' else configs.features.store.test
     if purpose == 'push':
@@ -69,6 +72,23 @@ def fetch_from_hops(configs: DictConfig):
         if not (os.path.exists(train_preprocessed_data_path) and os.path.exists(test_preprocessed_data_path)):
             raise FileNotFoundError('Not able to found preprocessed data locally..')
         print('Data present locally for training')
+
+def register_to_hops(configs: DictConfig, metrics: dict[str, float]):
+    mr = get_mr(init_hops())
+    model = mr.python.create_model(
+        name=configs.models.registry.name, 
+        version=configs.models.registry.version, 
+        metrics=metrics, 
+        description=configs.models.registry.description
+        )
+    model.save(configs.features.paths.model)
+    print('Model registered...')
+
+def get_registered_model(configs: DictConfig):
+    mr = get_mr(init_hops())
+    model = mr.get_model(name=configs.models.registry.name, version=configs.models.registry.version)
+    return model    
+
     
 
 

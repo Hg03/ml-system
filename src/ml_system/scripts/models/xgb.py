@@ -1,5 +1,6 @@
 from ml_system.scripts.utils.loading_utils import load_
 from ml_system.scripts.utils.saving_utils import save_
+from ml_system.scripts.features.feature_store import register_to_hops
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import precision_score, recall_score, f1_score
 from xgboost import XGBClassifier
@@ -49,7 +50,7 @@ def train_model(configs: DictConfig):
     full_model_pipeline.fit(X_train, y_train_encoded)
     train_pred = full_model_pipeline.predict(X_train)
     test_pred = full_model_pipeline.predict(X_test)
-    save_(to_store=full_model_pipeline, path=configs.features.paths.model, format='model')
+    save_(to_store=full_model_pipeline, path=configs.models.paths.model, format='model')
     print('Model Trained...')
     make_experiment(configs=configs, assets=[X_train, X_test, y_train_encoded, y_test_encoded, train_pred, test_pred], model=full_model_pipeline)
 
@@ -59,14 +60,20 @@ def make_experiment(configs: DictConfig, assets: list[Any], model: Any):
     mlflow.set_tracking_uri('https://dagshub.com/Hg03/ml-system.mlflow')
     dagshub.auth.add_app_token(os.getenv('DAGSHUB_USER_TOKEN'))
     with mlflow.start_run():
-        mlflow.log_metric('precision', precision_score(y_test, test_pred, average='macro'))
-        mlflow.log_metric('recall', recall_score(y_test, test_pred, average='macro'))
-        mlflow.log_metric('f1', f1_score(y_test, test_pred, average='macro'))
+        precision = precision_score(y_test, test_pred, average='macro')
+        recall = recall_score(y_test, test_pred, average='macro')
+        f1 = f1_score(y_test, test_pred, average='macro')
+        mlflow.log_metric('precision', precision)
+        mlflow.log_metric('recall', recall)
+        mlflow.log_metric('f1', f1)
         signature = infer_signature(X_train.to_pandas(), train_pred)
         mlflow.sklearn.log_model(
             sk_model=model, 
-            artifact_path=configs.models.paths.artifacts, 
+            artifact_path=configs.models.paths.model, 
             signature=signature,
             input_example=X_train.to_pandas()[:5]
         )
     print('Experimentation Done...')
+    if configs.pipeline.register_model:
+        register_to_hops(configs=configs, metrics={'precision': precision, 'recall': recall, 'f1 score': f1})
+        print('Model registered to hopsworks')

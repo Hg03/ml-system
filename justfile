@@ -1,6 +1,6 @@
 full:
     @echo "Full Pipeline (Feature + Training) run started.."
-    @python app/training_endpoint.py
+    @python app/training_endpoint.py pipeline.register_model=True
 
 full_offline:
     @echo "Full Pipeline (Feature + Training) run started.."
@@ -16,7 +16,7 @@ feature_offline:
 
 train:
     @echo "Training Pipeline Only started.."
-    @python app/training_endpoint.py pipeline.stage=train
+    @python app/training_endpoint.py pipeline.stage=train pipeline.register_mode=True
 
 train_offline:
     @echo "Training Pipeline Only started.."
