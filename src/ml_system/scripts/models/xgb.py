@@ -50,7 +50,7 @@ def train_model(configs: DictConfig):
     full_model_pipeline.fit(X_train, y_train_encoded)
     train_pred = full_model_pipeline.predict(X_train)
     test_pred = full_model_pipeline.predict(X_test)
-    save_(to_store=full_model_pipeline, path=configs.features.paths.model, format='model')
+    save_(to_store=full_model_pipeline, path=configs.models.paths.model, format='model')
     print('Model Trained...')
     make_experiment(configs=configs, assets=[X_train, X_test, y_train_encoded, y_test_encoded, train_pred, test_pred], model=full_model_pipeline)
 
@@ -69,7 +69,7 @@ def make_experiment(configs: DictConfig, assets: list[Any], model: Any):
         signature = infer_signature(X_train.to_pandas(), train_pred)
         mlflow.sklearn.log_model(
             sk_model=model, 
-            artifact_path=configs.models.paths.artifacts, 
+            artifact_path=configs.models.paths.model, 
             signature=signature,
             input_example=X_train.to_pandas()[:5]
         )
