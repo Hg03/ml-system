@@ -4,7 +4,6 @@ strategy:
 test_size: 0.3
 paths:
   preprocessor: artifacts/preprocessor/preprocessor.joblib
-  model: artifacts/model/full_model_pipeline.joblib
 raw_sequence_of_columns: ['age', 'gender', 'daily_screen_time_min', 'platform', 'social_media_time_min', 'negative_interactions_count', 'positive_interactions_count', 'sleep_hours', 'physical_activity_min', 'anxiety_level']
 processed_sequence_of_columns: ['gender', 'platform', 'age', 'daily_screen_time_min', 'social_media_time_min', 'negative_interactions_count', 'positive_interactions_count', 'sleep_hours', 'physical_activity_min', 'anxiety_level']
 store:
