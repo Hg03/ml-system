@@ -81,7 +81,7 @@ def register_to_hops(configs: DictConfig, metrics: dict[str, float]):
         metrics=metrics, 
         description=configs.models.registry.description
         )
-    model.save(configs.features.paths.model)
+    model.save(configs.models.paths.model)
     print('Model registered...')
 
 def get_registered_model(configs: DictConfig):
