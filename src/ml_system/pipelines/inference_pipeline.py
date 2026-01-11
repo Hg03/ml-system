@@ -7,3 +7,4 @@ class InferencePipeline:
     def execute(self, input):
         predictions = infer(configs=self.configs, input=input)
         print("Inference Pipeline Done..")
+        return predictions
